@@ -1,6 +1,7 @@
-from fastapi.security import OAuth2AuthorizationCodeBearer
-import httpx
 from functools import cached_property
+
+import httpx
+from fastapi.security import OAuth2AuthorizationCodeBearer
 
 
 class Auth0CodeBearer(OAuth2AuthorizationCodeBearer):

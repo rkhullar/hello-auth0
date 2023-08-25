@@ -1,7 +1,9 @@
+from typing import Annotated, Type
+
+from fastapi import APIRouter, Depends, Request, Security
+
 from .config import Auth0Settings
 from .util import Auth0CodeBearer, decode_jwt
-from fastapi import Security, Request, APIRouter, Depends
-from typing import Annotated, Type
 
 settings = Auth0Settings()
 auth_scheme = Auth0CodeBearer(domain=settings.auth0_host, scopes=settings.auth0_scopes)

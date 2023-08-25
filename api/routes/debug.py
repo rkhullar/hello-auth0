@@ -1,4 +1,4 @@
-from ..depends import create_router, ReadAuthData
+from ..depends import ReadAuthData, create_router
 
 router = create_router()
 
