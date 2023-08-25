@@ -16,7 +16,7 @@ class NetworkSettings(BaseSettings):
 class Auth0Settings(BaseSettings):
     auth0_host: str = os.environ['AUTH0_HOST']
     auth0_client_id: str = os.environ['AUTH0_CLIENT_ID']
-    auth0_scopes: list[str] = ['openid', 'email', 'profile', 'read:messages', 'write:messages']
+    auth0_scopes: list[str] = ['openid', 'email', 'profile', 'message:read', 'message:write']
     auth0_audience: str = os.environ['AUTH0_AUDIENCE']
 
 

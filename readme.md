@@ -34,12 +34,12 @@ python server.py
 
 #### Define the API
 - under Applications / APIs create a new API which defines your backend endpoints
-  - name: example-dev
-  - identifier: https://api-dev.example.company.org
-  - signing algorithm: RS256
+  - name: `example-dev`
+  - identifier: `https://api-dev.example.company.org`
+  - signing algorithm: `RS256`
 - define permissions for the API
-  - read:messages - read messages
-  - write:messages - write messages
+  - `message:read` - read messages
+  - `message:write` - write messages
 - review permission settings
   - enable Role Based Access Control (RBAC)
   - optionally, enable the permissions claim for the access token
@@ -55,31 +55,40 @@ python server.py
 
 #### Create the Client Application
 - create the application
-  - name: Example (SPA)
-  - type: Single Page Application
+  - name: `Example (SPA)`
+  - type: `Single Page Application`
 - define the allowed callback urls
   - for starting out you can use the following for local development
-    - http://localhost:8000/docs/oauth2-redirect
+    - `http://localhost:8000/docs/oauth2-redirect`
   - as you deploy your environments for your backend APIs you would add those urls as well
-    - https://api-dev.example.company.org
-    - https://api-stage.example.company.org
-    - https://api.example.company.org
+    - `https://api-dev.example.company.org`
+    - `https://api-stage.example.company.org`
+    - `https://api.example.company.org`
   - it's discouraged to use `localhost` in the allowed urls
     - the common practice is to modify your `/etc/hosts` file for developing applications locally
     - then you could add the url for that host in the allowed callbacks
-      - https://api-local.example.company.org
+      - `https://api-local.example.company.org`
 - review advanced settings
   - optionally, disable the `Implicit` grant type, which is discouraged for obtaining access tokens for SPAs
 
 #### Modify Config for FastAPI
 - under the basic information for the client application you should see the following
-  - domain (defaults to {tenent}.{region}.auth0.com)
+  - domain, defaults to `{tenent}.{region}.auth0.com`
   - client id
   - client secret
 - review your environment variable from `local.env` and substitute the `AUTH0_HOST` and `AUTH0_CLIENT_ID`
   - we don't need the client secret since the application type is SPA
 - also substitute the `AUTH0_AUDIENCE` based on the environment you're working with
   - the audience should match one of the logical APIs defined in your auth0 tenet
+- review scopes and permissions
+  - within `config.py` the list of scopes are hardcoded to include the standard scopes and custom permissions for the API
+
+#### Setup Application Roles
+- under User Management / Roles create a new role to represent normal application users:
+  - `example/user` - default user for example application
+- add both permissions from the API to the role
+- assign your test users to the role, so that they will have base permissions after login
+  - before launching for a real world application, you should find a way to assign the role automatically when users signup for the app
 
 ### Additional Notes
 
@@ -88,8 +97,8 @@ You could deploy the project code with the same AWS architecture from my medium 
 - [FastAPI on AWS with MongoDB Atlas and Okta][medium-tutorial]
 
 When you define the HTTP api gateway routes you can actually select which scopes are required upfront in the request.
-- `GET /message` and `GET /message/{id}` would require the `read:messages` scope
-- `POST /message` and `PUT /message/{id}` would require the `write:messages` scope
+- `GET /message` and `GET /message/{id}` would require the `message:read` scope
+- `POST /message` and `PUT /message/{id}` would require the `message:write` scope
 
 The only caveat for doing the above is that there's some coupling between infrastructure and application code. Instead of
 having proxy+ routes in API Gateway that would forward all authenticated requests to the lambda function, we would have to
