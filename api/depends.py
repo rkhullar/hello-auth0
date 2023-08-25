@@ -3,6 +3,7 @@ from typing import Annotated, Type
 from fastapi import APIRouter, Depends, Request, Security
 
 from .config import Auth0Settings
+from .schema.user import Auth0IdentityToken, Auth0User, User
 from .util import Auth0CodeBearer, decode_jwt
 
 settings = Auth0Settings()
@@ -30,6 +31,18 @@ def read_request_state(key: str, _type: Type):
 # ReadAuthType = read_request_state(key='auth_type', _type=AuthScheme)
 ReadAuthData = read_request_state(key='auth_data', _type=dict)
 
+
+async def read_identity_token(access_token: ReadAccessToken) -> Auth0IdentityToken:
+    data = await auth_scheme.read_user_info(access_token)
+    return Auth0IdentityToken.model_validate(data)
+
+ReadIdentityToken = Annotated[Auth0IdentityToken, Depends(read_identity_token)]
+
+
+async def read_user_info(identity_token: ReadIdentityToken) -> Auth0User:
+    return Auth0User.from_token_data(identity_token)
+
+GetUser = Annotated[User, Depends(read_user_info)]
 
 ''' NOTE: how to support multiple auth schemes:
 - add auto_error=False to auth_scheme instance
