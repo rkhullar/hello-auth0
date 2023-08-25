@@ -48,7 +48,7 @@ python server.py
 - review machine-to-machine applications
   - auth0 automatically creates a test application when you create the API
   - for this project we don't need the test application
-  - so you can the test application and access, and eventually delete the unused application
+  - so you can remove access from the test application, and later delete the unused app
 - review general settings
   - the default token expiration is 24 hours
   - allow skipping user consent is enabled by default
