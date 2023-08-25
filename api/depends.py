@@ -6,7 +6,7 @@ from .config import Auth0Settings
 from .util import Auth0CodeBearer, decode_jwt
 
 settings = Auth0Settings()
-auth_scheme = Auth0CodeBearer(domain=settings.auth0_host, scopes=settings.auth0_scopes)
+auth_scheme = Auth0CodeBearer(domain=settings.auth0_host)
 ReadAccessToken = Annotated[str, Security(auth_scheme)]
 
 
