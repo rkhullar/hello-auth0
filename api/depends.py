@@ -36,11 +36,11 @@ async def read_identity_token(access_token: ReadAccessToken) -> Auth0IdentityTok
     data = await auth_scheme.read_user_info(access_token)
     return Auth0IdentityToken.model_validate(data)
 
-ReadIdentityToken = Annotated[Auth0IdentityToken, Depends(read_identity_token)]
+ReadIdentityToken = Annotated[Auth0IdentityToken, Security(read_identity_token)]
 
 
 async def read_user_info(identity_token: ReadIdentityToken) -> Auth0User:
-    return Auth0User.from_token_data(identity_token)
+    return Auth0User.from_token(identity_token)
 
 GetUser = Annotated[User, Depends(read_user_info)]
 
