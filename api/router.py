@@ -1,10 +1,5 @@
 from fastapi import APIRouter
-from .depends import ReadAccessToken
+from .routes import debug
 
 router = APIRouter()
-
-
-@router.get('/test')
-def hello_world(access_token: ReadAccessToken):
-    print(access_token)
-    return {'message': 'hello world'}
+router.include_router(debug.router, prefix='/debug', tags=['debug'])
